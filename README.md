@@ -9,6 +9,9 @@ GEDCOM → Neo4j → Multi-Agent AI (OpenAI) → Web + WhatsApp (Twilio)
 
 ---
 
+## Medium article
+https://medium.com/@pbrudny/building-a-family-tree-ai-assistant-from-gedcom-to-whatsapp-bot-with-a-graph-database-b1fcf0b3cc9e
+
 ## Architecture
 
 ```
