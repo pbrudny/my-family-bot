@@ -1,0 +1,6 @@
+backend/
+neo4j/
+.env
+.git
+**/__pycache__
+**/*.pyc
