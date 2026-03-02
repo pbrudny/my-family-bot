@@ -1,0 +1,7 @@
+frontend/
+neo4j/
+.env
+.git
+**/__pycache__
+**/*.pyc
+**/tests/
