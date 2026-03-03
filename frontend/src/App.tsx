@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Chat from "./pages/Chat";
 import Login from "./pages/Login";
+import Admin from "./pages/Admin";
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
   const userId = localStorage.getItem("userId");
@@ -20,6 +21,7 @@ export default function App() {
             </PrivateRoute>
           }
         />
+        <Route path="/admin" element={<Admin />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
