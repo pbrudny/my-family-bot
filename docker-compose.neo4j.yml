@@ -1,7 +1,6 @@
 services:
   neo4j:
     image: neo4j:5.24
-    container_name: rodzina-walachow-neo4j
     environment:
       NEO4J_AUTH: neo4j/${NEO4J_PASSWORD:-password}
       NEO4J_server_memory_heap_initial__size: 256m
@@ -10,7 +9,14 @@ services:
     volumes:
       - neo4j_data:/data
       - neo4j_logs:/logs
-      - ./neo4j/init:/var/lib/neo4j/import
+    networks:
+      coolify:
+        aliases:
+          - rodzina-walachow-neo4j
+
+networks:
+  coolify:
+    external: true
 
 volumes:
   neo4j_data:
