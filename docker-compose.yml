@@ -13,12 +13,6 @@ services:
     ports:
       - "7474:7474"
       - "7687:7687"
-    healthcheck:
-      test: ["CMD", "neo4j", "status"]
-      interval: 20s
-      timeout: 15s
-      retries: 10
-      start_period: 60s
 
   backend:
     build:
@@ -28,8 +22,7 @@ services:
     environment:
       NEO4J_URI: bolt://neo4j:7687
     depends_on:
-      neo4j:
-        condition: service_healthy
+      - neo4j
     ports:
       - "8000:8000"
 

@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import re
 from contextlib import asynccontextmanager
@@ -25,8 +26,16 @@ async def init_driver() -> None:
         settings.neo4j_uri,
         auth=(settings.neo4j_user, settings.neo4j_password),
     )
-    await _driver.verify_connectivity()
-    logger.info("Neo4j driver initialised")
+    for attempt in range(1, 31):
+        try:
+            await _driver.verify_connectivity()
+            logger.info("Neo4j driver initialised (attempt %d)", attempt)
+            return
+        except Exception as exc:
+            if attempt == 30:
+                raise
+            logger.warning("Neo4j not ready yet (attempt %d/30): %s — retrying in 5s", attempt, exc)
+            await asyncio.sleep(5)
 
 
 async def close_driver() -> None:
