@@ -1,0 +1,7 @@
+FROM neo4j:5.24
+
+ENV NEO4J_server_memory_heap_initial__size=256m
+ENV NEO4J_server_memory_heap_max__size=512m
+ENV NEO4J_server_memory_pagecache__size=128m
+
+EXPOSE 7474 7687

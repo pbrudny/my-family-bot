@@ -109,3 +109,23 @@ Line length 100, Python 3.12 target, rules `E`, `F`, `I`.
 ### Test conventions
 
 All tests mock OpenAI and Neo4j — no live connections needed. `asyncio_mode = "auto"` in `pyproject.toml` (no `@pytest.mark.asyncio` decorator needed, but currently used explicitly in tests).
+
+## Coolify deployment rules
+
+Deployment target: `rodzina-walachow.codewithpeter.com` on MIKR.US VPS via Coolify.
+
+When creating or updating an application in Coolify for this project, these settings are mandatory:
+
+| Field | Value |
+|-------|-------|
+| Build Pack | **Dockerfile** |
+| Base Directory | `/` |
+| Dockerfile Location | `/Dockerfile` |
+| Ports Exposes | `8000` |
+| Port Mappings | *(empty — never set host port mappings)* |
+| Network Aliases | *(empty)* |
+| Force HTTPS | **disabled** |
+
+TLS is handled by Cloudflare in front, so Let's Encrypt / Force HTTPS must stay off — enabling it breaks routing.
+
+The single container serves both the React SPA (from `/app/static/`) and the FastAPI backend on port 8000. Traefik routes HTTP traffic to the container via the `coolify` Docker network without host port binding.
