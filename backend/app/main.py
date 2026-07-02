@@ -1,12 +1,16 @@
 import logging
 from contextlib import asynccontextmanager
+from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 
 from app.config import settings
 from app.db.neo4j_client import close_driver, init_driver
 from app.routers import admin, chat, whatsapp
+
+STATIC_DIR = Path("/app/static")
 
 logging.basicConfig(
     level=logging.INFO,
@@ -47,3 +51,17 @@ app.include_router(admin.router)
 @app.get("/health")
 async def health() -> dict[str, str]:
     return {"status": "ok"}
+
+
+@app.get("/{full_path:path}", include_in_schema=False)
+async def serve_spa(full_path: str) -> FileResponse:
+    """Serve the React SPA: return the requested file or fall back to index.html."""
+    if not STATIC_DIR.exists():
+        raise HTTPException(status_code=404)
+    candidate = STATIC_DIR / full_path
+    if candidate.is_file():
+        return FileResponse(candidate)
+    index = STATIC_DIR / "index.html"
+    if index.is_file():
+        return FileResponse(index)
+    raise HTTPException(status_code=404)
