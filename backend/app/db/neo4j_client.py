@@ -26,15 +26,20 @@ async def init_driver() -> None:
         settings.neo4j_uri,
         auth=(settings.neo4j_user, settings.neo4j_password),
     )
-    for attempt in range(1, 31):
+    for attempt in range(1, 13):
         try:
             await _driver.verify_connectivity()
             logger.info("Neo4j driver initialised (attempt %d)", attempt)
             return
         except Exception as exc:
-            if attempt == 30:
-                raise
-            logger.warning("Neo4j not ready yet (attempt %d/30): %s — retrying in 5s", attempt, exc)
+            if attempt == 12:
+                logger.error(
+                    "Neo4j unreachable after 12 attempts (%s) — "
+                    "graph queries will fail until Neo4j is available",
+                    exc,
+                )
+                return
+            logger.warning("Neo4j not ready (attempt %d/12): %s — retrying in 5s", attempt, exc)
             await asyncio.sleep(5)
 
 
