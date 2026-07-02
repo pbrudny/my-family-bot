@@ -3,21 +3,22 @@ services:
     image: neo4j:5.24
     environment:
       NEO4J_AUTH: neo4j/${NEO4J_PASSWORD:-password}
-      NEO4J_PLUGINS: '["apoc"]'
-      NEO4J_server_memory_heap_initial__size: 512m
-      NEO4J_server_memory_heap_max__size: 1G
+      NEO4J_server_memory_heap_initial__size: 256m
+      NEO4J_server_memory_heap_max__size: 512m
+      NEO4J_server_memory_pagecache__size: 128m
     volumes:
       - neo4j_data:/data
       - neo4j_logs:/logs
       - ./neo4j/init:/var/lib/neo4j/import
     ports:
-      - "7474:7474"   # Browser
-      - "7687:7687"   # Bolt
+      - "7474:7474"
+      - "7687:7687"
     healthcheck:
       test: ["CMD", "neo4j", "status"]
-      interval: 15s
-      timeout: 10s
-      retries: 5
+      interval: 20s
+      timeout: 15s
+      retries: 10
+      start_period: 60s
 
   backend:
     build:
