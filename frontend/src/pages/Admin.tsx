@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 const S: Record<string, React.CSSProperties> = {
   page:       { minHeight: "100vh", background: "#f5f5f5" },

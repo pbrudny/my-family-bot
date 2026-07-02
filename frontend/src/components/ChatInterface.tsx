@@ -1,9 +1,21 @@
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 
 interface Message {
   role: "user" | "bot";
   text: string;
 }
+
+const bubbleStyle = (role: "user" | "bot"): React.CSSProperties => ({
+  maxWidth: "70%",
+  padding: "0.65rem 1rem",
+  borderRadius: role === "user" ? "16px 16px 4px 16px" : "16px 16px 16px 4px",
+  background: role === "user" ? "#2563eb" : "#fff",
+  color: role === "user" ? "#fff" : "#111",
+  alignSelf: role === "user" ? "flex-end" : "flex-start",
+  boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
+  whiteSpace: "pre-wrap" as const,
+  lineHeight: 1.5,
+});
 
 const styles: Record<string, React.CSSProperties> = {
   wrapper: {
@@ -19,17 +31,6 @@ const styles: Record<string, React.CSSProperties> = {
     flexDirection: "column" as const,
     gap: "0.75rem",
   },
-  bubble: (role: "user" | "bot") => ({
-    maxWidth: "70%",
-    padding: "0.65rem 1rem",
-    borderRadius: role === "user" ? "16px 16px 4px 16px" : "16px 16px 16px 4px",
-    background: role === "user" ? "#2563eb" : "#fff",
-    color: role === "user" ? "#fff" : "#111",
-    alignSelf: role === "user" ? "flex-end" : "flex-start",
-    boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
-    whiteSpace: "pre-wrap" as const,
-    lineHeight: 1.5,
-  }),
   form: {
     display: "flex",
     gap: "0.5rem",
@@ -110,7 +111,7 @@ export default function ChatInterface({ userId }: { userId: string }) {
     <div style={styles.wrapper}>
       <div style={styles.messages}>
         {messages.map((msg, i) => (
-          <div key={i} style={styles.bubble(msg.role)}>
+          <div key={i} style={bubbleStyle(msg.role)}>
             {msg.text}
           </div>
         ))}
